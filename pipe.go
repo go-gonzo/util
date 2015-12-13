@@ -8,15 +8,9 @@ import (
 )
 
 // Merge concurrently Merges the output of multiple chan of gonzo.File into a pipe.
-func Merge(pipe gonzo.Pipe, pipes ...gonzo.Pipe) gonzo.Pipe {
+func Merge(ctx context.Context, pipes ...gonzo.Pipe) gonzo.Pipe {
 
-	if len(pipes) == 0 {
-		return pipe
-	}
-
-	pipes = append([]gonzo.Pipe{pipe}, pipes...)
-
-	ctx, cancel := context.WithCancel(pipe.Context())
+	ctx, cancel := context.WithCancel(ctx)
 	for _, pipe := range pipes {
 		go func(c context.Context) {
 			<-c.Done()
