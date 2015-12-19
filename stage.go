@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"io/ioutil"
 	"path/filepath"
-	"strings"
 
-	"github.com/omeid/gonzo/context"
 	"github.com/omeid/gonzo"
+	"github.com/omeid/gonzo/context"
 )
 
 // Concatenates all the files from the input channel
@@ -103,17 +102,4 @@ func List(checkpoint string) gonzo.Stage {
 			}
 		}
 	}
-}
-
-func Trim(prefix string) gonzo.Stage {
-	return Rename(func(name string) string {
-		return strings.TrimPrefix(name, prefix)
-	})
-}
-
-func Rename(rename func(string) string) gonzo.Stage {
-	return Do(func(file gonzo.File) gonzo.File {
-		file.FileInfo().SetName(rename(file.FileInfo().Name()))
-		return file
-	})
 }
